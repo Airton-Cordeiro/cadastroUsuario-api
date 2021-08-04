@@ -51,6 +51,38 @@ class UserController {
             })
         });
     }
+
+    async delete(req,res){
+
+        const id = req.params.id
+
+       
+
+        const usuarioExiste = await User.findOne({ _id: id });
+
+        if(!usuarioExiste){
+            return res.status(400).json({
+                error: true,
+                code: 121,
+                message: `Usuário Não existe`
+            })    
+        }
+
+        const user = await User.deleteOne({_id: id}, (err) =>{
+            if(err){
+                return res.status(400).json({
+                    error: true,
+                    code: 122,
+                    message: `Usuário não foi apagado com sucesso!`
+                })
+            }
+        })
+        
+        return res.json({
+            error: false,
+            message: `Usuário apagado com sucesso!`
+        })
+    }
 }
 
 export default new UserController();
