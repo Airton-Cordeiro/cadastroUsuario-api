@@ -20,13 +20,25 @@ class UserController {
             return res.status(400).json({
                 error: true,
                 code: 106,
-                message: "Erro: não foi possivle executar a solicitação"
+                message: "Erro: não foi possivel executar a solicitação"
             })
         })
     }
 
-
-
+    async show(req, res){
+        User.findOne({_id: req.params.id}, "_id name email createdAt updatedAt").then((user) => {
+            return res.status(200).json({
+                error: false,
+                usuario: user
+            })
+        }).catch((erro) => {
+            return res.status(400).json({
+                error: true,
+                code: 107,
+                message: "Erro: não foi possivel executar a solicitação"
+            })
+        })
+    }
 
     async store(req, res) {
 
