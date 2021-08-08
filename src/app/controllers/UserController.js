@@ -88,9 +88,72 @@ class UserController {
         });
     }
 
+    async update(req,res){
+        const schema = Yup.object().shape({
+            _id: Yup.string().required(),
+            name: Yup.string(),
+            email: Yup.string().email(),
+            password: Yup.string().min(6)
+        })
+
+        if(!(await schema.isValid(req.body))){
+            return res.status(400).json({
+                error: true,
+                code: 108,
+                message: "Error: Dados do formulário inválido!"
+            })
+
+        }
+
+        const { _id, email } = req.body;
+
+        const usuarioExiste = await User.findOne({_id: _id})
+
+        if(!usuarioExiste){
+            return res.status(400).json({
+                error: true,
+                code: 109,
+                message: "Error: usuario não encontrado!"
+            });
+        };
+
+        if(email != usuarioExiste.email){
+            const emailExiste = await User.findOne({email: email})
+
+            if(emailExiste){
+                return res.status(400).json({
+                    error: true,
+                    code: 110,
+                    message: "Esse E-mail já está cadastrado!"
+                })
+            }
+        }
+
+        var dados = req.body;
+        if(dados.password){
+            dados.password = await bcrypt.hash(dados.password, 8);
+        }
+
+        await User.updateOne({_id: dados._id }, dados, (err)=>{
+            if(err) return res.status(400).json({
+                    error: true,
+                    code: 111,
+                    message: "Error: usuario não foi Editado com sucesso!"
+            });
+            
+            return res.json({
+                error: false,
+                message: "Sucesso: usuário editado com sucesso!"
+            })
+
+        })
+
+        
+    };
+
     async delete(req,res){
 
-        const id = req.params.id
+        const id = req.params.id;
 
        
 
@@ -110,9 +173,9 @@ class UserController {
                     error: true,
                     code: 122,
                     message: `Usuário não foi apagado com sucesso!`
-                })
-            }
-        })
+                });
+            };
+        });
         
         return res.json({
             error: false,
