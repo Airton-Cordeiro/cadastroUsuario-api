@@ -18,6 +18,7 @@ routes.delete('/users/:id', authMiddleware, UserController.delete);
 
 //Rotas Profile
 routes.get("/perfil", authMiddleware, PerfilController.show)
+routes.put("/perfil", authMiddleware, PerfilController.update)
 
 //Rotas Login
 routes.post('/login', LoginController.store);

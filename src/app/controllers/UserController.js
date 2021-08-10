@@ -8,7 +8,7 @@ class UserController {
     async index(req,res){
 
           const { page = 1 } = req.query;
-          const { limit = 40 } = req.query;
+          const { limit = 4 } = req.query;
 
           await User.paginate({}, {select: '_id name email', page, limit}).then((users) => {
             return res.json({
