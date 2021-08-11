@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import mongoose from 'mongoose';
+import multer from 'multer';
+import multerUpImgUsers from './app/middlewares/uploadImgUser'
 
 import UserController from './app/controllers/UserController';
 import LoginController from './app/controllers/LoginController';
@@ -8,6 +9,7 @@ import PerfilController from './app/controllers/PerfilController';
 import authMiddleware from '../src/app/middlewares/auth';
 
 const routes = new Router();
+const = multer({storage: multerUpImgUsers})
 
 //Rotas users
 routes.get('/users', UserController.index);
