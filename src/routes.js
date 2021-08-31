@@ -6,10 +6,12 @@ import UserController from './app/controllers/UserController';
 import LoginController from './app/controllers/LoginController';
 import PerfilController from './app/controllers/PerfilController';
 
+import PerfilImagemController from './app/controllers/PerfilImagemController.js';
+
 import authMiddleware from '../src/app/middlewares/auth';
 
 const routes = new Router();
-const = multer({storage: multerUpImgUsers})
+const uploadImgUser = multer(multerUpImgUsers);
 
 //Rotas users
 routes.get('/users', UserController.index);
@@ -21,7 +23,7 @@ routes.delete('/users/:id', authMiddleware, UserController.delete);
 //Rotas Profile
 routes.get("/perfil", authMiddleware, PerfilController.show)
 routes.put("/perfil", authMiddleware, PerfilController.update)
-
+routes.put("/perfil-img",authMiddleware, uploadImgUser.single('file'), PerfilImagemController.update)
 //Rotas Login
 routes.post('/login', LoginController.store);
 
